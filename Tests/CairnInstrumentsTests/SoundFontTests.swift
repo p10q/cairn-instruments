@@ -10,6 +10,13 @@ final class SoundFontTests: XCTestCase {
         XCTAssertEqual(bank.presets.map(\.id), ["0:0", "0:40", "128:0"])
     }
 
+    func testBankCanBeReadFromANonzeroBasedDataSlice() throws {
+        let data = fixture([("Piano", 0, 0)])
+        let prefixed = Data([255]) + data
+        let bank = try SoundFontBank(data: prefixed.dropFirst())
+        XCTAssertEqual(bank.presets.map(\.name), ["Piano"])
+    }
+
     func testRejectsTruncatedChunksAndDuplicatePresets() throws {
         let valid = fixture([("Piano", 0, 0)])
         for count in 0..<valid.count {

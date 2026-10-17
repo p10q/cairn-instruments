@@ -84,7 +84,8 @@ public struct SoundFontBank: Sendable {
         return destination
     }
 
-    public init(data: Data) throws {
+    public init(data bytes: Data) throws {
+        let data = Data(bytes)
         guard data.count >= 12, data.count <= Self.maximumBytes,
               Self.tag(data, at: 0) == "RIFF", Self.tag(data, at: 8) == "sfbk",
               Int(Self.uint32(data, at: 4)) + 8 == data.count else { throw InstrumentFailure.invalidBank }
